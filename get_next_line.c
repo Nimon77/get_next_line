@@ -6,7 +6,7 @@
 /*   By: nsimon <nsimon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 14:13:44 by nsimon            #+#    #+#             */
-/*   Updated: 2020/01/16 16:25:34 by nsimon           ###   ########.fr       */
+/*   Updated: 2020/01/17 13:01:34 by nsimon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,18 @@ int		get_line(int fd, char **str)
 	if (!(buff = malloc(sizeof(*buff) * (BUFFER_SIZE + 1))))
 		return (-1);
 	if ((res = read(fd, buff, BUFFER_SIZE)) == -1)
-		return (-1);
+		return (ft_stop(&buff, NULL, NULL, -1));
 	buff[res] = '\0';
 	ft_stop(str, NULL, NULL, 0);
 	if (!(*str = ft_strdup(buff)))
-		return (-1);
+		return (ft_stop(&buff, NULL, NULL, -1));
 	while (is_in_str(buff, "\n") == BUFFER_SIZE && res != 0)
 	{
 		if ((res = read(fd, buff, BUFFER_SIZE)) == -1)
-			return (-1);
+			return (ft_stop(&buff, NULL, NULL, -1));
 		buff[res] = '\0';
 		if (!(tmp = ft_strjoin(*str, buff)))
-			return (-1);
+			return (ft_stop(&buff, NULL, NULL, -1));
 		free(*str);
 		*str = tmp;
 	}
@@ -104,7 +104,7 @@ int		join_line(char **line, char **new_line, const char *str, char **prev)
 	max = is_in_str(str, "\n");
 	if (max > 0)
 	{
-		if (!(tmp = malloc(sizeof(*tmp) * max + 1)))
+		if (!(tmp = malloc(sizeof(*tmp) * (max + 1))))
 			return (0);
 		ft_strlcpy(tmp, str, max + 1);
 		*line = ft_strjoin(*new_line, tmp);
